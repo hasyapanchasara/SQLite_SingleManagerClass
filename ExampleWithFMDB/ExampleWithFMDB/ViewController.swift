@@ -17,10 +17,10 @@ class ViewController: UIViewController {
        
     }
 
-    @IBAction func insertButtonTapEvent(sender: AnyObject) {
+    @IBAction func insertButtonTapEvent(_ sender: AnyObject) {
         
         
-        if LocalDatabase.sharedInstance.methodToInsertUpdateDeleteData("INSERT INTO CONTACTS_TABLE (name, address, phone) VALUES ('Demo1', 'Demo2', 123)")
+        if LocalDatabase.sharedInstance.methodToInsertUpdateDeleteData("INSERT INTO CONTACTS_TABLE (name, address, phone) VALUES ('Satyam Mall', 'Brainvire', 0085)")
         {
             NSLog("Store Successfully.")
         }
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
 
 
     
-    @IBAction func getFromDatabase(sender: AnyObject) {
+    @IBAction func getFromDatabase(_ sender: AnyObject) {
 
         NSLog("%@",LocalDatabase.sharedInstance.methodToSelectData("SELECT * FROM CONTACTS_TABLE"))
         

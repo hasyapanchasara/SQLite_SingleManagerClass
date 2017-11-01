@@ -143,6 +143,7 @@
 				TargetAttributes = {
 					A32A448D1BE0D8A400166377 = {
 						CreatedOnToolsVersion = 7.0.1;
+						LastSwiftMigration = 0810;
 					};
 				};
 			};
@@ -309,6 +310,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExampleWithFMDB/ExampleWithFMDB-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -323,6 +325,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.HP.ExampleWithFMDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExampleWithFMDB/ExampleWithFMDB-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

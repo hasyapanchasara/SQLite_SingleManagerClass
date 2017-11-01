@@ -15,33 +15,33 @@ class LocalDatabase: NSObject {
     
 
     
-        func methodToCreateDatabase() -> NSURL? {
+        func methodToCreateDatabase() -> URL? {
         
-        let fileManager = NSFileManager.defaultManager()
+        let fileManager = FileManager.default
         
-        let urls = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         
-        if let documentDirectory:NSURL = urls.first { // No use of as? NSURL because let urls returns array of NSURL
+        if let documentDirectory:URL = urls.first { // No use of as? NSURL because let urls returns array of NSURL
             
             // exclude cloud backup
             do {
-                try documentDirectory.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey)
+                try (documentDirectory as NSURL).setResourceValue(true, forKey: URLResourceKey.isExcludedFromBackupKey)
             } catch _{
                 print("Failed to exclude backup")
             }
             
             // This is where the database should be in the documents directory
-            let finalDatabaseURL = documentDirectory.URLByAppendingPathComponent("contact.db")
+            let finalDatabaseURL = documentDirectory.appendingPathComponent("contact.db")
             
-            if finalDatabaseURL.checkResourceIsReachableAndReturnError(nil) {
+            if (finalDatabaseURL as NSURL).checkResourceIsReachableAndReturnError(nil) {
                 // The file already exists, so just return the URL
                 return finalDatabaseURL
             } else {
                 // Copy the initial file from the application bundle to the documents directory
-                if let bundleURL = NSBundle.mainBundle().URLForResource("contact", withExtension: "db") {
+                if let bundleURL = Bundle.main.url(forResource: "contact", withExtension: "db") {
                     
                     do {
-                        try fileManager.copyItemAtURL(bundleURL, toURL: finalDatabaseURL)
+                        try fileManager.copyItem(at: bundleURL, to: finalDatabaseURL)
                     } catch _ {
                         print("Couldn't copy file to final location!")
                     }
@@ -57,53 +57,53 @@ class LocalDatabase: NSObject {
         return nil
     }
     
-        func methodToInsertUpdateDeleteData(strQuery : String) -> Bool
+        func methodToInsertUpdateDeleteData(_ strQuery : String) -> Bool
         {
             
            // print("%@",String(methodToCreateDatabase()!.absoluteString))
             
             let contactDB = FMDatabase(path: String(methodToCreateDatabase()!.absoluteString) )
             
-            if contactDB.open() {
+            if (contactDB?.open())! {
                 
                 let insertSQL = strQuery
                 
-                let result = contactDB.executeUpdate(insertSQL,
-                    withArgumentsInArray: nil)
+                let result = contactDB?.executeUpdate(insertSQL,
+                    withArgumentsIn: nil)
                 
-                if !result {
+                if !result! {
                     print("Failed to add contact")
-                    print("Error: \(contactDB.lastErrorMessage())")
+                    print("Error: \(contactDB?.lastErrorMessage())")
                     return false
                 } else {
                     print("Contact Added")
                     return true
                 }
             } else {
-                print("Error: \(contactDB.lastErrorMessage())")
+                print("Error: \(contactDB?.lastErrorMessage())")
                 return false
             }
 
         }
 
-        func methodToSelectData(strQuery : String) -> NSMutableArray
+        func methodToSelectData(_ strQuery : String) -> NSMutableArray
         {
             
             let arryToReturn : NSMutableArray = []
             
-            print("%@",String(methodToCreateDatabase()!.absoluteString))
+            print("%@",String(methodToCreateDatabase()!.absoluteString) ?? "")
             
             let contactDB = FMDatabase(path: String(methodToCreateDatabase()!.absoluteString) )
             
-            if contactDB.open() {
+            if (contactDB?.open())! {
                 let querySQL = strQuery
                 
-                let results:FMResultSet? = contactDB.executeQuery(querySQL,
-                    withArgumentsInArray: nil)
+                let results:FMResultSet? = contactDB?.executeQuery(querySQL,
+                    withArgumentsIn: nil)
 
                 while results?.next() == true
                 {
-                    arryToReturn.addObject(results!.resultDictionary())
+                    arryToReturn.add(results!.resultDictionary())
                 }
                 
                 // NSLog("%@", arryToReturn)
@@ -120,9 +120,9 @@ class LocalDatabase: NSObject {
                 }
                 
 
-                contactDB.close()
+                contactDB?.close()
             } else {
-                print("Error: \(contactDB.lastErrorMessage())")
+                print("Error: \(contactDB?.lastErrorMessage())")
             }
             
             return arryToReturn
