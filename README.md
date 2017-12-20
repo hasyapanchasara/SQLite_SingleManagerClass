@@ -5,26 +5,47 @@ SQLite SingleManagerClass and use of FMDB
 - SingleTonManager class
 - Swift language
 - Use of FMDB
+- Create database
+- Insert, update, delete & select operations
 
-- To create database
+
+# Implementation step
+
+- Create your .db file
+- Add freamework libsqlite3.tbd
+- Drag and drop LocalDatabase.swift file into your project
+
+
 
 # Method to create database
-```
-func methodToCreateDatabase() -> NSURL?{} 
-```
 
+```
+LocalDatabase.sharedInstance.methodToCreateDatabase()
+```
 
 
 # Method to insert, update and delete data
-```
-func methodToInsertUpdateDeleteData(strQuery : String) -> Bool{}
-```
 
+```
+LocalDatabase.sharedInstance.methodToInsertUpdateDeleteData("INSERT INTO CONTACTS_TABLE (name, address, phone) VALUES ('Satyam Mall', 'Brainvire', 0085)", completion: { (completed) in
+    if completed
+    {
+        print("Data updated successfully")
+    }
+    else
+    {
+        print("Fail while data updation")
+    }
+})
+```
 
 
 # Method to select data
+
 ```
-func methodToSelectData(strQuery : String) -> NSMutableArray{}
+LocalDatabase.sharedInstance.methodToSelectData("SELECT * FROM CONTACTS_TABLE", completion: { (dataReturned) in
+    print(dataReturned)
+})
 ```
 
 ![simulator screen shot 18-jan-2017 1 02 22 pm](https://cloud.githubusercontent.com/assets/23353196/22055014/ea1c9c90-dd7e-11e6-9b72-6fef4c931686.png)

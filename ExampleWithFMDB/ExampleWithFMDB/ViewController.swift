@@ -20,14 +20,18 @@ class ViewController: UIViewController {
     @IBAction func insertButtonTapEvent(_ sender: AnyObject) {
         
         
-        if LocalDatabase.sharedInstance.methodToInsertUpdateDeleteData("INSERT INTO CONTACTS_TABLE (name, address, phone) VALUES ('Satyam Mall', 'Brainvire', 0085)")
-        {
-            NSLog("Store Successfully.")
-        }
-        else
-        {
-            NSLog("Failled to store in database.")
-        }
+      
+        
+        LocalDatabase.sharedInstance.methodToInsertUpdateDeleteData("INSERT INTO CONTACTS_TABLE (name, address, phone) VALUES ('Satyam Mall', 'Brainvire', 0085)", completion: { (completed) in
+            if completed
+            {
+                print("Data updated successfully")
+            }
+            else
+            {
+                print("Fail while data updation")
+            }
+        })
         
     }
 
@@ -35,7 +39,11 @@ class ViewController: UIViewController {
     
     @IBAction func getFromDatabase(_ sender: AnyObject) {
 
-        NSLog("%@",LocalDatabase.sharedInstance.methodToSelectData("SELECT * FROM CONTACTS_TABLE"))
+      
+        LocalDatabase.sharedInstance.methodToSelectData("SELECT * FROM CONTACTS_TABLE", completion: { (dataReturned) in
+            print(dataReturned)
+        })
+        
         
     }
     

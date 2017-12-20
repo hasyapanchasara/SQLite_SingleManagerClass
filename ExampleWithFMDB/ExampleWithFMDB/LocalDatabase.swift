@@ -57,10 +57,10 @@ class LocalDatabase: NSObject {
         return nil
     }
     
-        func methodToInsertUpdateDeleteData(_ strQuery : String) -> Bool
+    
+    
+        func methodToInsertUpdateDeleteData(_ strQuery : String,completion: @escaping (_ result: Bool) -> Void)
         {
-            
-           // print("%@",String(methodToCreateDatabase()!.absoluteString))
             
             let contactDB = FMDatabase(path: String(methodToCreateDatabase()!.absoluteString) )
             
@@ -73,59 +73,59 @@ class LocalDatabase: NSObject {
                 
                 if !result! {
                     print("Failed to add contact")
-                    print("Error: \(contactDB?.lastErrorMessage())")
-                    return false
+                    print("Error: \(String(describing: contactDB?.lastErrorMessage()))")
+                    completion(false)
+                    
                 } else {
                     print("Contact Added")
-                    return true
-                }
-            } else {
-                print("Error: \(contactDB?.lastErrorMessage())")
-                return false
-            }
-
-        }
-
-        func methodToSelectData(_ strQuery : String) -> NSMutableArray
-        {
-            
-            let arryToReturn : NSMutableArray = []
-            
-            print("%@",String(methodToCreateDatabase()!.absoluteString) ?? "")
-            
-            let contactDB = FMDatabase(path: String(methodToCreateDatabase()!.absoluteString) )
-            
-            if (contactDB?.open())! {
-                let querySQL = strQuery
-                
-                let results:FMResultSet? = contactDB?.executeQuery(querySQL,
-                    withArgumentsIn: nil)
-
-                while results?.next() == true
-                {
-                    arryToReturn.add(results!.resultDictionary())
-                }
-                
-                // NSLog("%@", arryToReturn)
-                
-                if arryToReturn.count == 0
-                {
-                    print("Record Not Found")
+                    completion(true)
                     
                 }
-                else
-                {
-                    print("Record Found")
-
-                }
-                
-
-                contactDB?.close()
             } else {
-                print("Error: \(contactDB?.lastErrorMessage())")
+                print("Error: \(String(describing: contactDB?.lastErrorMessage()))")
+                completion(false)
+               
             }
-            
-            return arryToReturn
 
         }
+
+    
+    func methodToSelectData(_ strQuery : String,completion: @escaping (_ result: NSMutableArray) -> Void)
+    {
+        
+        let arryToReturn : NSMutableArray = []
+        
+        let contactDB = FMDatabase(path: String(methodToCreateDatabase()!.absoluteString) )
+        
+        if (contactDB?.open())! {
+            let querySQL = strQuery
+            
+            let results:FMResultSet? = contactDB?.executeQuery(querySQL,
+                                                               withArgumentsIn: nil)
+            
+            while results?.next() == true
+            {
+                arryToReturn.add(results!.resultDictionary())
+            }
+            
+            // NSLog("%@", arryToReturn)
+            
+            if arryToReturn.count == 0
+            {
+                let dict = NSMutableDictionary()
+                dict.setValue("No Record Found", forKey: "ErrorMessage")
+                arryToReturn.addObjects(from: [dict])
+                completion(arryToReturn)
+            }
+            
+            contactDB?.close()
+        } else {
+            print("Error: \(String(describing: contactDB?.lastErrorMessage()))")
+        }
+        
+        completion(arryToReturn)
+        
+    }
+
+    
 }
