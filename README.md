@@ -1,5 +1,7 @@
 # SQLite_SingleManagerClass
 
+# [ Contact Me!  ](https://www.linkedin.com/in/hasyapanchasara/)
+
 SQLite SingleManagerClass and use of FMDB
 
 - SingleTonManager class
@@ -52,6 +54,6 @@ LocalDatabase.sharedInstance.methodToSelectData("SELECT * FROM CONTACTS_TABLE", 
 
 
 
-
+# [ Contact Me!  ](https://www.linkedin.com/in/hasyapanchasara/)
 
 <a href="https://www.paypal.me/hasya25/1"><img src="https://user-images.githubusercontent.com/23353196/30152617-4567dbc4-93d1-11e7-9b3a-20a9c92c1f50.png" style="max-width:100%;" width="170"></a>
